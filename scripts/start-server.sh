@@ -1,4 +1,51 @@
 #!/bin/bash
+export DISPLAY=:99
+
+LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/FerdiClient | grep LATEST | cut -d '=' -f2)"
+CUR_V="$(find ${DATA_DIR} -name "ferdiclient-*" | cut -d '-' -f2)"
+
+if [ -z $LAT_V ]; then
+    if [ -z $CUR_V ]; then
+        echo "---Can't get latest version of Ferdi-Client, putting container into sleep mode!---"
+        sleep infinity
+    else
+        echo "---Can't get latest version of Ferdi-Client, falling back to v$CUR_V---"
+    fi
+fi
+
+if [ -f ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz ]; then
+	rm -rf ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz
+fi
+
+echo "---Version Check---"
+if [ -z "$CUR_V" ]; then
+    echo "---Ferdi-Client not found, downloading and installing v$LAT_V...---"
+    cd ${DATA_DIR}
+    if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz "https://github.com/getferdi/ferdi/releases/download/v${LAT_V}/ferdi-${LAT_V}.tar.gz" ; then
+        echo "---Successfully downloaded Ferdi-Client v$LAT_V---"
+    else
+        echo "---Something went wrong, can't download Ferdi-Client v$LAT_V, putting container into sleep mode!---"
+        sleep infinity
+    fi
+    tar -C ${DATA_DIR} --strip-components=1 -xf ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz
+	touch ferdiclient-$LAT_V
+    rm ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz
+elif [ "$CUR_V" != "$LAT_V" ]; then
+    echo "---Version missmatch, installed v$CUR_V, downloading and installing v$LAT_V...---"
+    cd ${DATA_DIR}
+	rm -rf ${DATA_DIR}/*
+    if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz "https://github.com/getferdi/ferdi/releases/download/v${LAT_V}/ferdi-${LAT_V}.tar.gz" ; then
+        echo "---Successfully downloaded Ferdi-Client v$LAT_V---"
+    else
+        echo "---Something went wrong, can't download Ferdi-Client v$LAT_V, putting container into sleep mode!---"
+        sleep infinity
+    fi
+    tar -C ${DATA_DIR} --strip-components=1 -xf ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz
+	touch ferdiclient-$LAT_V
+    rm ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz
+elif [ "$CUR_V" == "$LAT_V" ]; then
+    echo "---nzbget v$CUR_V up-to-date---"
+fi
 
 echo "---Preparing Server---"
 echo "---Resolution check---"
@@ -36,7 +83,9 @@ echo "---Starting Fluxbox---"
 screen -d -m env HOME=/etc /usr/bin/fluxbox
 sleep 2
 echo "---Starting noVNC server---"
-websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem 8080 localhost:5900
+websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem 8080 localhost:${X11-PORT}
 sleep 2
 
-sleep infinity
+echo "---Starting Ferdi-Client---"
+cd ${DATA_DIR}
+${DATA_DIR}/ferdi --no-sandbox 2>/dev/null
