@@ -23,6 +23,7 @@ docker run --name Ferdi-Client -d \
 	--volume /mnt/cache/appdata/ferdi-client:/ferdi \
 	ich777/ferdi-client
 ```
+### Webgui address: http://[SERVERIP]:[PORT]/vnc.html?autoconnect=true
 
 This Docker was mainly edited for better use with Unraid, if you don't use Unraid you should definitely try it!
  
