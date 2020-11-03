@@ -48,6 +48,15 @@ elif [ "$CUR_V" == "$LAT_V" ]; then
 fi
 
 echo "---Preparing Server---"
+if [ ! -f ${DATA_DIR}/.config/Ferdi/config/settings.json ]; then
+    mkdir -p ${DATA_DIR}/.config/Ferdi/config
+    echo '{
+  "enableSystemTray": false
+}' > ${DATA_DIR}/.config/Ferdi/config/settings.json
+else
+    sed -i "/  \"enableSystemTray\":/c\  \"enableSystemTray\": false," ${DATA_DIR}/.config/Ferdi/config/settings.json
+fi
+
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
 	CUSTOM_RES_W=1024
