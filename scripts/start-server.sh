@@ -51,7 +51,10 @@ echo "---Preparing Server---"
 if [ ! -f ${DATA_DIR}/.config/Ferdi/config/settings.json ]; then
     mkdir -p ${DATA_DIR}/.config/Ferdi/config
     echo '{
-  "enableSystemTray": false
+  "runInBackground": true,
+  "reloadAfterResume": true,
+  "enableSystemTray": false,
+  "startMinimized": false
 }' > ${DATA_DIR}/.config/Ferdi/config/settings.json
 else
     sed -i "/  \"enableSystemTray\":/c\  \"enableSystemTray\": false," ${DATA_DIR}/.config/Ferdi/config/settings.json
