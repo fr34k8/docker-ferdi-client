@@ -44,7 +44,7 @@ elif [ "$CUR_V" != "$LAT_V" ]; then
 	touch ferdiclient-$LAT_V
     rm ${DATA_DIR}/FerdiClient-v$LAT_V.tar.gz
 elif [ "$CUR_V" == "$LAT_V" ]; then
-    echo "---nzbget v$CUR_V up-to-date---"
+    echo "---Ferdi-Client v$CUR_V up-to-date---"
 fi
 
 echo "---Preparing Server---"
