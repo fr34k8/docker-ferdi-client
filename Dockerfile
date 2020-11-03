@@ -14,6 +14,7 @@ RUN export TZ=Europe/Rome && \
 ENV DATA_DIR=/ferdi
 ENV CUSTOM_RES_W=1024
 ENV CUSTOM_RES_H=768
+ENV X11_PORT=5900
 ENV UMASK=000
 ENV UID=99
 ENV GID=100
@@ -26,7 +27,7 @@ RUN mkdir $DATA_DIR && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
-COPY /icons/* /usr/share/novnc/app/images/icons/
+#COPY /icons/* /usr/share/novnc/app/images/icons/
 COPY /conf/ /etc/.fluxbox/
 RUN chmod -R 770 /opt/scripts/
 
