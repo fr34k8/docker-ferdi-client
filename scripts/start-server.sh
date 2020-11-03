@@ -88,4 +88,4 @@ sleep 2
 
 echo "---Starting Ferdi-Client---"
 cd ${DATA_DIR}
-${DATA_DIR}/ferdi --no-sandbox 2>/dev/null
+${DATA_DIR}/ferdi --no-sandbox --disable-accelerated-video --disable-gpu --dbus-stub 2>/dev/null
