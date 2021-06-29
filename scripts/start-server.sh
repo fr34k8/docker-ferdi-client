@@ -114,4 +114,8 @@ sleep 2
 
 echo "---Starting Ferdi-Client---"
 cd ${DATA_DIR}
-${DATA_DIR}/ferdi --no-sandbox --disable-accelerated-video --disable-gpu --dbus-stub 2>/dev/null
+if [ "${DEBUG_OUTPUT}" != "true" ]; then
+  ${DATA_DIR}/ferdi --no-sandbox --disable-accelerated-video --disable-gpu --dbus-stub 2>/dev/null
+else
+  ${DATA_DIR}/ferdi --no-sandbox --disable-accelerated-video --disable-gpu --dbus-stub
+fi
