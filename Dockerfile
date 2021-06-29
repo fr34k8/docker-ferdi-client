@@ -4,7 +4,7 @@ LABEL maintainer="admin@minenet.at"
 
 RUN export TZ=Europe/Rome && \
 	apt-get update && \
-	apt-get -y install --no-install-recommends libxcursor-dev libnss3 libgdk-pixbuf2.0-0 libgtk-3-0 libasound2 && \
+	apt-get -y install --no-install-recommends libxcursor-dev libnss3 libgdk-pixbuf2.0-0 libgtk-3-0 libasound2 libgbm-dev && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
 	rm -rf /var/lib/apt/lists/* && \
