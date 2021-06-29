@@ -2,11 +2,19 @@
 export DISPLAY=:99
 export XAUTHORITY=${DATA_DIR}/.Xauthority
 
-LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/FerdiClient | grep LATEST | cut -d '=' -f2)"
-CUR_V="$(find ${DATA_DIR} -name "ferdiclient-*" | cut -d '-' -f2)"
-if [ -z "$LAT_V" ]; then
-		LAT_V="$(wget -qO- https://api.github.com/repos/getferdi/ferdi/releases/latest | grep tag_name | cut -d '"' -f4 | cut -d 'v' -f2)"
+if [ "${FERDI_V}" == "stable" ]; then
+  LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/FerdiClient | grep LATEST | cut -d '=' -f2)"
+  if [ -z "$LAT_V" ]; then
+    LAT_V="$(wget -qO- https://api.github.com/repos/getferdi/ferdi/releases/latest | grep tag_name | cut -d '"' -f4 | cut -d 'v' -f2)"
+  fi
+elif [ "${FERDI_V}" == "latest" ]; then
+  LAT_V="$( wget -qO- https://api.github.com/repos/getferdi/ferdi/releases | grep tag_name | cut -d '"' -f4 | cut -d 'v' -f2 | sort -V | tail -1)"
+else
+  echo "---Valid options for variable 'FERDI_V' are 'stable' and 'latest', putting container into sleep mode!---"
+  sleep infinity
 fi
+CUR_V="$(find ${DATA_DIR} -name "ferdiclient-*" | cut -d '-' -f2)"
+
 
 if [ -z $LAT_V ]; then
     if [ -z $CUR_V ]; then
