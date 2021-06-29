@@ -13,7 +13,7 @@ else
   echo "---Valid options for variable 'FERDI_V' are 'stable' and 'latest', putting container into sleep mode!---"
   sleep infinity
 fi
-CUR_V="$(find ${DATA_DIR} -name "ferdiclient-*" | cut -d '-' -f2)"
+CUR_V="$(find ${DATA_DIR} -name "ferdiclient-*" | cut -d '-' -f2-)"
 
 
 if [ -z $LAT_V ]; then
